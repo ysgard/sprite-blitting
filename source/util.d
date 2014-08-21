@@ -8,6 +8,20 @@ import std.path;
 import std.string;
 
 /**
+ * SDL_color enums
+ */
+enum Color : SDL_Color {
+	Black = SDL_Color(0, 0, 0, 0),
+		White = SDL_Color(255, 255, 255, 0),
+		Red = SDL_Color(255, 0, 0, 0),
+		Green = SDL_Color(0, 255, 0, 0),
+		Blue = SDL_Color(0, 0, 255, 0),
+		Transparent = SDL_Color(0, 0, 0, 255),
+}
+
+
+
+/**
 *  Loads an image directly to texture using SDL_image's
 *  built in function IMG_Load
 *  @param file The image file to load

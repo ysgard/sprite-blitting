@@ -45,12 +45,28 @@ int main()
 
 	// Create a window
 	auto main_window = new Window("Sprite Blitting", WINDOW_WIDTH, WINDOW_HEIGHT);
+	// Set its background color to blue
+	main_window.setClearColor(Color.Blue);
 
 	// Create a debugging window to catch log messages
-	auto debug_window = new Window("Debug Window", 800, 300);
+	//auto debug_window = new Window("Debug Window", 800, 300);
 
-	// Load the spritesheet texture - use the main window's renderer.
-	auto sprite_sheet = main_window.loadTexture("data/BrogueFont5.png");
+	// Load the spritesheet image
+	auto sprite_surface = loadImage("data/BrogueFont5.png");
+	
+	// Convert the black pixels into transparent pixels
+	if (!SDL_SetColorKey(sprite_surface, true, 0x00000000)) {
+		writefln(SDLErrorStr("Cannot set color key on spritesheet!"));
+	}
+
+	// Set the texture to red.
+	SDL_SetSurfaceColorMod(sprite_surface, 255, 0, 0);
+	
+	// Convert the resulting surface to a texture
+	auto sprite_sheet = SDL_CreateTextureFromSurface(main_window.renderer(), sprite_surface);
+		//	auto sprite_sheet = main_window.loadTexture("data/BrogueFont5.png");
+
+
 
 	// Get information about the spritesheet and the window
 	SDL_Rect window_size = { 0, 0, 0, 0 };
@@ -84,7 +100,7 @@ int main()
 			}
 		}
 		main_window.clear();
-		debug_window.clear();
+		//debug_window.clear();
 
 		// Blit the spritesheet texture into the window at the coords of the clip rectangle
 		if(SDL_RenderCopy(main_window.renderer(), sprite_sheet, null, &clip_rect)) {
@@ -92,7 +108,7 @@ int main()
 		}
 		
 		main_window.present();
-		debug_window.present();
+		//debug_window.present();
 	}
 	return 0;
 }

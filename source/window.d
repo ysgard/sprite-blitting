@@ -119,7 +119,7 @@ class Window {
 
 		return tex;
 	}
-
+	
 	/**
 	* LoadTexture takes the string of an image file and used LoadImage to obtain
 	* the surface, which it then converts to a texture using the provied
@@ -140,6 +140,13 @@ class Window {
 		} else {
 			throw new Exception(format("LoadImage: Unable to convert texture: %s", IMG_GetError()));
 		}
+	}
+
+	/**
+	 * Set the clear color for the window
+	 */
+	void setClearColor(SDL_Color c) {
+		SDL_SetRenderDrawColor(mRenderer, c.r, c.g, c.b, c.unused);
 	}
 
 	/**
