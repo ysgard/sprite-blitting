@@ -44,7 +44,10 @@ int main()
 	}
 
 	// Create a window
-	auto main_window = new Window("Sprite Blitting", 640, 480);
+	auto main_window = new Window("Sprite Blitting", WINDOW_WIDTH, WINDOW_HEIGHT);
+
+	// Create a debugging window to catch log messages
+	auto debug_window = new Window("Debug Window", 800, 300);
 	
 	// Main event loop
 	bool quit = false;
@@ -64,7 +67,10 @@ int main()
 			}
 		}
 		main_window.Clear();
+		debug_window.Clear();
+		
 		main_window.Present();
+		debug_window.Present();
 	}
 	return 0;
 }
