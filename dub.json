@@ -1,0 +1,9 @@
+{
+		"name": "sprite-blitting",
+		"description": "Test App to experiment with sprite blitting",
+		"copyright": "Copyright © 2014, Ysgard (Jan Van Uytven)",
+		"authors": ["ysgard"],
+		"dependencies": {
+			"derelict-sdl2" : "~>1.1.0"
+		}
+}
