@@ -73,7 +73,7 @@ class Window {
 	*  @param yPivot The y coordinate of the pivot, relative to (0, 0) being center of dstRect
 	*  @param flip The flip to apply to the image, default is none
 	*/
-	void Draw(SDL_Texture *tex,
+	void draw(SDL_Texture *tex,
 						SDL_Rect dstRect,
 						SDL_Rect *clip,
 						float angle,
@@ -98,7 +98,7 @@ class Window {
 	*  @param fontSize The size we want the font to be
 	*  @return An SDL_Texture* to the rendered message
 	*/
-	SDL_Texture* RenderText(string message, string fontFile,
+	SDL_Texture* renderText(string message, string fontFile,
 		SDL_Color color, int fontSize) {
 
 		if (!exists(fontFile)) {
@@ -127,7 +127,7 @@ class Window {
 	* @param file The file containing the texture we want to load.
 	* @return An SDL_Texture* pointing to the loaded texture.
 	*/
-	SDL_Texture* LoadTexture(string file) {
+	SDL_Texture* loadTexture(string file) {
 
 		SDL_Texture* tex = null;
 		auto sfc = loadImage(file);
@@ -145,21 +145,21 @@ class Window {
 	/**
 	* Clear the renderer
 	*/
-	void Clear() {
+	void clear() {
 		SDL_RenderClear(mRenderer);
 	}
 
 	/**
 	* Present the renderer, i.e., update screen
 	*/
-	void Present() {
+	void present() {
 		SDL_RenderPresent(mRenderer);
 	}
 
 	/**
 	* Update mBox to match the current window size
 	*/
-	SDL_Rect Box() {
+	SDL_Rect box() {
 		SDL_GetWindowSize(mWindow, &mBox.w, &mBox.h);
 		return mBox;
 	}
@@ -168,11 +168,15 @@ class Window {
 	* Is the Window initialized and active?
 	* @return running state
 	*/
-	bool IsActive() {
+	bool isActive() {
 		return active;
 	}
 
-  SDL_Renderer* GetRenderer() {
+  SDL_Renderer* renderer() {
 		return mRenderer;
   }
+
+	SDL_Window* window() {
+		return mWindow;
+	}
 }
