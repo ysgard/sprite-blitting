@@ -85,13 +85,13 @@ int main()
 																			SDL_TEXTUREACCESS_TARGET,
 																			window_size.w, window_size.h);
 	
-	
 	// Get a timer and start it
 	Timer t = new Timer;
 	scope(exit) { t.stop(); }
 	t.start();
 	int old_seconds = -1;
 	int seconds = 0; // To force an immediate draw
+
 	
 	// Main event loop
 	bool quit = false;
@@ -150,6 +150,7 @@ int main()
 		}
 
 		SDL_RenderCopy(main_window.renderer(), buffer_tex, null, null);
+
 		main_window.present();
 		main_window.clear();
 	}
