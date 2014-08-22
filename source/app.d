@@ -11,6 +11,7 @@
 
 import std.stdio;
 import std.string;
+import std.random;
 
 // Derelict2
 import derelict.sdl2.sdl;
@@ -19,6 +20,7 @@ import derelict.sdl2.ttf;
 
 import util;
 import window;
+import timer;
 
 immutable WINDOW_WIDTH = 1200;
 immutable WINDOW_HEIGHT = 800;
@@ -45,8 +47,6 @@ int main()
 
 	// Create a window
 	auto main_window = new Window("Sprite Blitting", WINDOW_WIDTH, WINDOW_HEIGHT);
-	// Set its background color to blue
-	main_window.setClearColor(Color.Blue);
 
 	// Create a debugging window to catch log messages
 	//auto debug_window = new Window("Debug Window", 800, 300);
@@ -59,13 +59,11 @@ int main()
 		writefln(SDLErrorStr("Cannot set color key on spritesheet!"));
 	}
 
-	// Set the texture to red.
-	SDL_SetSurfaceColorMod(sprite_surface, 255, 0, 0);
-	
 	// Convert the resulting surface to a texture
 	auto sprite_sheet = SDL_CreateTextureFromSurface(main_window.renderer(), sprite_surface);
-		//	auto sprite_sheet = main_window.loadTexture("data/BrogueFont5.png");
 
+	// Create a 'punch' for getting the sprites out of the spritesheet.
+	SDL_Rect sprite_clip = { 0, 0, 18, 28 };
 
 
 	// Get information about the spritesheet and the window
@@ -80,7 +78,19 @@ int main()
 	SDL_Rect clip_rect = { (window_size.w - sheet_size.w) / 2,
 												 (window_size.h - sheet_size.h) / 2,
 												 sheet_size.w, sheet_size.h };
+
+	// Create a texture to store our changes so we can control when we blit to the screen
+	auto buffer_tex = SDL_CreateTexture(main_window.renderer(),
+																			SDL_PIXELFORMAT_RGBA8888,
+																			SDL_TEXTUREACCESS_TARGET,
+																			window_size.w, window_size.h);
 	
+	// Get a timer and start it
+	Timer t = new Timer;
+	scope(exit) { t.stop(); }
+	t.start();
+	int old_seconds = 0;
+	int seconds;
 	
 	// Main event loop
 	bool quit = false;
@@ -103,10 +113,41 @@ int main()
 		//debug_window.clear();
 
 		// Blit the spritesheet texture into the window at the coords of the clip rectangle
-		if(SDL_RenderCopy(main_window.renderer(), sprite_sheet, null, &clip_rect)) {
-			writefln(SDLErrorStr("Could not blit spritesheet to window!"));
+		// if(SDL_RenderCopy(main_window.renderer(), sprite_sheet, null, &clip_rect)) {
+		// 	writefln(SDLErrorStr("Could not blit spritesheet to window!"));
+		// }
+
+		// Fill the entire screen with random sprites with random colors!
+		// We only do this every 1000 ticks.
+		seconds = t.ticks() / 1000 ;
+		if (seconds > old_seconds) {
+			SDL_SetRenderTarget(main_window.renderer(), buffer_tex);
+			SDL_RenderClear(main_window.renderer());
+			foreach (int i; 0 .. window_size.w / sprite_clip.w) {
+				foreach (int j; 0 .. window_size.h / sprite_clip.h) {
+					// Random letter
+					int glyph_x = uniform(0, 16);
+					int glyph_y = uniform(3, 16);
+					// random color
+					SDL_Color r_color = { cast(ubyte)uniform(0, 256),
+																cast(ubyte)uniform(0, 256),
+																cast(ubyte)uniform(0, 256),
+																0 };
+					// Now blit the random glyph from the spritesheet to the screen
+					// using the random color
+					SDL_Rect dest_rect = { i * 18, j * 28, 18, 28 };
+					SDL_Rect src_rect = {  glyph_x * 18, glyph_y * 28, 18, 28 };
+					SDL_SetTextureColorMod(sprite_sheet, r_color.r, r_color.g, r_color.b);
+					SDL_RenderCopy(main_window.renderer(), sprite_sheet, &src_rect, &dest_rect);
+				}
+			}
+			old_seconds = seconds;
+			// Reset render target back to main window
+			SDL_SetRenderTarget(main_window.renderer(), null);
 		}
-		
+
+		SDL_RenderCopy(main_window.renderer(), buffer_tex, null, null);
+				
 		main_window.present();
 		//debug_window.present();
 	}
