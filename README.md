@@ -9,4 +9,6 @@ To use:
 2. Clone this repo
 3. Inside the repo, run 'dub'.
 
-This content is released under the [MIT License](LICENSE.txt).
+This content is released under the [MIT License](LICENSE.txt), with
+the exception of the BrogueFont* images, which belong to Brian Walker
+and are used here without permission.
