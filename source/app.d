@@ -61,6 +61,7 @@ int main()
 
 	// Convert the resulting surface to a texture
 	auto sprite_sheet = SDL_CreateTextureFromSurface(main_window.renderer(), sprite_surface);
+	SDL_SetTextureBlendMode(sprite_sheet, SDL_BLENDMODE_ADD);
 
 	// Create a 'punch' for getting the sprites out of the spritesheet.
 	SDL_Rect sprite_clip = { 0, 0, 18, 28 };
@@ -136,10 +137,22 @@ int main()
 																cast(ubyte)uniform(0, 256),
 																cast(ubyte)uniform(0, 256),
 																0 };
+					SDL_Color b_color = { cast(ubyte)uniform(0, 256),
+																cast(ubyte)uniform(0, 256),
+																cast(ubyte)uniform(0, 256),
+																0 };
 					// Now blit the random glyph from the spritesheet to the screen
 					// using the random color
 					SDL_Rect dest_rect = { i * 18, j * 28, 18, 28 };
 					SDL_Rect src_rect = {  glyph_x * 18, glyph_y * 28, 18, 28 };
+
+					// Draw a random background color for the sprite.
+					SDL_SetRenderDrawColor(main_window.renderer(),
+																 b_color.r, b_color.g, b_color.b, 0);
+					SDL_RenderFillRect(main_window.renderer(), &dest_rect);
+					SDL_SetRenderDrawColor(main_window.renderer(), 0, 0, 0, 0);
+
+					// Blit the sprite
 					SDL_SetTextureColorMod(sprite_sheet, r_color.r, r_color.g, r_color.b);
 					SDL_RenderCopy(main_window.renderer(), sprite_sheet, &src_rect, &dest_rect);
 				}
