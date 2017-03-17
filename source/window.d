@@ -146,7 +146,7 @@ class Window {
 	 * Set the clear color for the window
 	 */
 	void setClearColor(SDL_Color c) {
-		SDL_SetRenderDrawColor(mRenderer, c.r, c.g, c.b, c.unused);
+		SDL_SetRenderDrawColor(mRenderer, c.r, c.g, c.b, c.a);
 	}
 
 	/**
