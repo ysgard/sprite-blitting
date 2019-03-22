@@ -11,15 +11,13 @@ import std.string;
  * SDL_color enums
  */
 enum Color : SDL_Color {
-	Black = SDL_Color(0, 0, 0, 0),
-		White = SDL_Color(255, 255, 255, 0),
-		Red = SDL_Color(255, 0, 0, 0),
-		Green = SDL_Color(0, 255, 0, 0),
-		Blue = SDL_Color(0, 0, 255, 0),
-		Transparent = SDL_Color(0, 0, 0, 255),
+    Black = SDL_Color(0, 0, 0, 0),
+    White = SDL_Color(255, 255, 255, 0),
+    Red = SDL_Color(255, 0, 0, 0),
+    Green = SDL_Color(0, 255, 0, 0),
+    Blue = SDL_Color(0, 0, 255, 0),
+    Transparent = SDL_Color(0, 0, 0, 255),
 }
-
-
 
 /**
 *  Loads an image directly to texture using SDL_image's
@@ -28,19 +26,19 @@ enum Color : SDL_Color {
 *  @return SDL_Surface* to the loaded image
 */
 SDL_Surface* loadImage(string file) {
-	 // Do some quick checking on the file - does it exist?
-	// Does it have an extension? (needed for IMG_Load)
-	if ( !(exists(file) && extension(file).length)) {
-		throw new Exception(format("LoadImage: file %s does not exist or does not have an image extension.", file));
-	}
+    // Do some quick checking on the file - does it exist?
+    // Does it have an extension? (needed for IMG_Load)
+    if ( !(exists(file) && extension(file).length)) {
+        throw new Exception(format("LoadImage: file %s does not exist or does not have an image extension.", file));
+    }
 
-	auto sfc = IMG_Load(toStringz(file));
-	if (sfc == null) {
-		throw new Exception(format("LoadImage: Unable to load image %s - %s",
-			file, IMG_GetError()));
-	}
-	return sfc;
- }
+    auto sfc = IMG_Load(toStringz(file));
+    if (sfc == null) {
+        throw new Exception(format("LoadImage: Unable to load image %s - %s",
+                                   file, IMG_GetError()));
+    }
+    return sfc;
+}
 
 /**
 * LoadTexture takes the string of an image file and used LoadImage to obtain
@@ -71,18 +69,18 @@ static SDL_Texture* loadTexture(SDL_Renderer* ren, string file) {
  * x, y coordinates.
  */
 void applySurface(int x, int y, SDL_Texture *texture, SDL_Renderer *render, SDL_Rect *clip = null) {
-	SDL_Rect pos;
-	pos.x = x;
-	pos.y = y;
+    SDL_Rect pos;
+    pos.x = x;
+    pos.y = y;
 
-	// Detect if we should use clip width settings or texture width.
-	if (clip != null) {
-		pos.w = clip.w;
-		pos.h = clip.h;
-	} else {
-		SDL_QueryTexture(texture, null, null, &pos.w, &pos.h);
-	}
-	SDL_RenderCopy(render, texture, clip, &pos);
+    // Detect if we should use clip width settings or texture width.
+    if (clip != null) {
+        pos.w = clip.w;
+        pos.h = clip.h;
+    } else {
+        SDL_QueryTexture(texture, null, null, &pos.w, &pos.h);
+    }
+    SDL_RenderCopy(render, texture, clip, &pos);
 }
 
 /**
@@ -93,5 +91,5 @@ void applySurface(int x, int y, SDL_Texture *texture, SDL_Renderer *render, SDL_
  * @return A string containing the user-provided message and the last SDL error logged.
  */
 string SDLErrorStr(string msg) {
-	return format("SDL Error -> %s\n%s", msg, SDL_GetError());
+    return format("SDL Error -> %s\n%s", msg, SDL_GetError());
 }
