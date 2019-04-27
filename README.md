@@ -9,5 +9,5 @@ To use:
 2. Clone this repo
 3. Inside the repo, run 'dub'.
 
-[!Screenshot](sprite-blitting.png)
+![Screenshot](sprite-blitting.png)
 
